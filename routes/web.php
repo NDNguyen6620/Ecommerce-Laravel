@@ -16,7 +16,7 @@ use App\Http\Controllers\AdminController;
 |
 */
 
-Route::get('/', [HomeController::Class,'index']);
+Route::get('/', [HomeController::Class,'index'])->name('home');
 
 Route::middleware([
     'auth:sanctum',
@@ -38,6 +38,17 @@ Route::get('/show_product', [AdminController::Class,'show_product']);
 Route::get('/delete_product/{id}', [AdminController::Class,'delete_product']);
 Route::get('/update_product/{id}', [AdminController::Class,'update_product']);
 Route::post('/update_product_confirm/{id}', [AdminController::Class,'update_product_confirm']);
+
+Route::get('/product_details/{id}', [HomeController::Class,'product_details']);
+Route::post('/add_cart/{id}', [HomeController::Class,'add_cart']);
+Route::get('/show_cart', [HomeController::Class,'show_cart']);
+Route::post('/update_cart', [HomeController::Class,'update_cart']);
+Route::get('/remove_cart/{id}', [HomeController::Class,'remove_cart']);
+Route::get('/cash_order', [HomeController::Class,'cash_order']);
+
+
+
+
 
 
 
