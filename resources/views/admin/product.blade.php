@@ -65,7 +65,7 @@
                             </div>
                             <div class="div_design">
                                 <label for="">Product Discount Price:</label>
-                                <input type="text" class="text_color" name="discount_price" placeholder="write discount price product" required>
+                                <input type="text" class="text_color" name="discount_price" placeholder="write discount price product">
                             </div >
                             <div class="div_design">
                                 <label for="">Product Category:</label>

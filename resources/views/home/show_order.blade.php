@@ -63,10 +63,10 @@
                         <li class="nav-item">
                            <a class="nav-link" href="{{url('contact')}}">Contact</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item active">
                            <a class="nav-link" href="{{url('show_order')}}">Order</a>
                         </li>
-                        <li class="nav-item active">
+                        <li class="nav-item ">
                            <a class="nav-link" href="{{url('show_cart')}}">My Cart</a>
                         </li>
                         @if (Route::has('login'))
@@ -104,52 +104,47 @@
                     </div>
 
       @endif
-
-     <table class="table center">
-        <thead>
-            <tr>
-               
-                <th>Product title</th>
-                <th>Product quantity</th>
-                <th>Price</th>
-                <th>Image</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-        
-            <?php $totalPrice = 0; ?>
-            @foreach($cart as $data)
-            <form action="{{url('update_cart')}}" method="post">
-            @csrf
-            <tr>
-               <input type="hidden" name="cart_id" value="{{$data->id}}">
-                <td scope="row">{{$data->product_title}}</td>
-                <td>
-                   <input type="number" name="quantity" value="{{$data->quantity}}" min="1" style="width:70px; height:30px;"> 
-                </td>
-                <td>{{$data->price * $data->quantity}}
-                </td>
-                <td><img src="product_image/{{$data->image}}" alt="" width="30px" class="m-auto"></td>
-                <td >
-                  <button onclick="return confirm('Are you sure to update this product?')"  class="btn btn-primary">update</button>
-
-                  <a onclick="return confirm('Are you sure to remove this product?')" href="{{url('remove_cart',$data->id)}}" class="btn btn-danger">Remove</a>
-               </td>
-            </tr>
-            <?php $totalPrice = $totalPrice + ($data->price * $data->quantity) ?>
-            </form>
-            @endforeach
-            
-        </tbody>
-     </table>
-     <div>
-            <h1 class="total_deg center">Total Price: {{$totalPrice}}</h1>
-     </div>
-     <div class="center " > 
-            <h1 class="total_deg" >Proceed to order</h1>
-            <a  href="{{url('cash_order')}}" class="btn btn-danger">Cash On Delivery</a>
-     </div>
+                    <table class="table center">
+                        <thead>
+                            <tr class="th_color">
+                                <th>NO</th>
+                                <th>Payment Status</th>
+                                <th>Delivery Status</th>
+                                <th>Created At</th>
+                                <th>Order Detail</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($order as $item)
+                            <tr>
+                                <td>{{$loop->iteration}}</td>
+                                <td>{{$item->payment_status}}</td>
+                                <td>{{$item->deliver_status}}</td>
+                                <td>{{$item->created_at}}</td>
+                                <td>
+                                    <a href="{{url('show_order_detail',$item->id)}}" class="btn btn-primary">Order Detail</a>
+                                </td>
+                                <td>
+                                    @if($item->deliver_status == 'processing')
+                                    <a onclick="return confirm('Are you sure to cancel this order ?')" href="{{url('cancel',$item->id)}}" class="btn btn-primary">Cancel Order</a>
+                                    @else
+                                    <p>Can't Cancel Order</p>
+                                    @endif
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="16" style="text-align:center; font-size:20px; color:white">
+                                    No Order Found
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                    <div style="width:10%; margin:auto;padding:20px;">
+                    {{ $order->links() }}
+                    </div>  
       <!-- end client section -->
       <!-- footer start -->
      

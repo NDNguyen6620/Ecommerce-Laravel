@@ -23,6 +23,14 @@
         .th_color{
             background:#fff;
         }
+        th{
+            border:1px solid black;
+        }
+        td{
+            border:1px solid black;
+            background-color:#f5f5ef;
+
+        }
     </style>
   </head>
   <body>
@@ -53,14 +61,13 @@
                                 <th>Price</th>
                                 <th>Discount Price</th>
                                 <th>Product Image</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($product as $data)
                             <tr>
-                                <td scope="row">{{$data->title}}</td>
+                                <td>{{$data->title}}</td>
                                 <td>{{$data->description}}</td>
                                 <td>{{$data->quantity}}</td>
                                 <td>{{$data->category}}</td>
@@ -71,14 +78,19 @@
                                 </td>
                                 <td>
                                     <a href="{{url('/update_product',$data->id)}}" class="btn btn-success">Edit</a>
+                                    
+                                    <a onclick="return confirm('Are you sure to delete this product?')" href="{{url('/delete_product',$data->id)}}" class="btn btn-danger">Delete</a>
                                 </td>
-                                <td><a onclick="return confirm('Are you sure to delete this product?')" href="{{url('/delete_product',$data->id)}}" class="btn btn-danger">Delete</a></td>
                                 
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    <div style="width:10%; margin:auto;padding:20px;">
+                    {{ $product->links() }}
+                    </div>  
             </div>
+            
         </div>
       <!-- page-body-wrapper ends -->
     </div>

@@ -6,6 +6,12 @@ use Illuminate\Http\Request;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Order;
+use App\Models\Order_detail;
+
+use PDF;
+
+
 
 
 class AdminController extends Controller
@@ -53,7 +59,7 @@ class AdminController extends Controller
     }
     public function show_product()
     {
-        $product = Product::all();
+        $product = Product::paginate(6)->withQueryString();
         return view('admin.show_product',compact('product'));    
     }
     public function delete_product($id)
@@ -85,5 +91,49 @@ class AdminController extends Controller
         } catch (\Throwable $th) {
             dd($th);
         }
+    }
+    
+    public function show_orders()
+    {
+        $order = Order::all();
+        return view('admin.orders',compact('order'));
+    }
+
+
+    public function show_order_detail($id)
+    {
+        $order_detail = Order_detail::where('orders_id','=',$id)->get();
+        return view('admin.order_detail',compact('order_detail'));
+    }
+    public function delivered($id)
+    {
+        $order = Order::find($id);
+        $order->deliver_status = "Delivered";
+        $order->payment_status = "Paid";
+
+        $order->save();
+        return redirect()->back();
+    }
+    public function print_pdf($id)
+    {
+        $order = Order::find($id);
+        $order_detail = Order_detail::where('orders_id','=',$id)->get();
+        $pdf=PDF::loadview('admin.pdf',compact('order','order_detail'));
+        return $pdf->download('order_detail.pdf');
+    }
+    public function search(Request $request)
+    {
+        $search = $request->search;
+        $order = Order::where('name','LIKE',"%$search%")->orWhere('email','LIKE',"%$search%")->
+        orWhere('phone','LIKE',"%$search%")->get();
+        return view('admin.orders',compact('order'));
+    }
+    public function search2(Request $request)
+    {
+        $search = $request->search2;    
+        $product = Product::where('title','LIKE',"%$search%")->orWhere('category','LIKE',"%$search%")->
+        orWhere('price','LIKE',"%$search%")->orWhere('quantity','LIKE',"%$search%")->
+        orWhere('discount_price','LIKE',"%$search%")->paginate(5);
+        return view('admin.show_product',compact('product'));
     }
 }

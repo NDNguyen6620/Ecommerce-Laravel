@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
    <head>
+      <base href="/product">
       <!-- Basic -->
-      <base href="/public">
       <meta charset="utf-8" />
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <!-- Mobile Metas -->
@@ -21,21 +21,6 @@
       <link href="home/css/style.css" rel="stylesheet" />
       <!-- responsive style -->
       <link href="home/css/responsive.css" rel="stylesheet" />
-      <style type="text/css">
-            .center{
-                margin:auto;
-                width: 50%;
-                text-align:center;
-            }
-            table,th,td{
-                border: 1px solid black;
-            }
-            .total_deg{
-               font-size:20px;
-               padding:20px;
-               margin: auto;
-            }
-      </style>
    </head>
    <body>
       <div class="hero_area">
@@ -52,7 +37,7 @@
                         <li class="nav-item ">
                            <a class="nav-link" href="{{url('/')}}">Home <span class="sr-only">(current)</span></a>
                         </li>
-                        <li class="nav-item dropdown ">
+                        <li class="nav-item dropdown active">
                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"> <span class="nav-label">Products <span class="caret"></span></a>
                            <ul class="dropdown-menu">
                               @foreach($category as $cate)
@@ -66,7 +51,7 @@
                         <li class="nav-item">
                            <a class="nav-link" href="{{url('show_order')}}">Order</a>
                         </li>
-                        <li class="nav-item active">
+                        <li class="nav-item">
                            <a class="nav-link" href="{{url('show_cart')}}">My Cart</a>
                         </li>
                         @if (Route::has('login'))
@@ -94,65 +79,89 @@
             </div>
          </header>
          <!-- end header section -->
-         <!-- end slider section -->
       <!-- why section -->
+      <!-- product section -->
+      <section class="product_section layout_padding">
+         <div class="container">
+            <div class="heading_container heading_center">
+               <h2>
+                  {{$name}} <span>products</span>
+               </h2>
+               <div>
+                  <form action="{{url('product_search')}}" method="GET">
+                     @csrf
+                     <input style="width:500px; "type="text" name="search" placeholder="Search for Something">
+                     <input type="submit" value="search">
 
-      @if(session()->has('message'))
-                    <div class="alert alert-success">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
-                        {{session()->get('message')}}
-                    </div>
-
-      @endif
-
-     <table class="table center">
-        <thead>
-            <tr>
-               
-                <th>Product title</th>
-                <th>Product quantity</th>
-                <th>Price</th>
-                <th>Image</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-        
-            <?php $totalPrice = 0; ?>
-            @foreach($cart as $data)
-            <form action="{{url('update_cart')}}" method="post">
-            @csrf
-            <tr>
-               <input type="hidden" name="cart_id" value="{{$data->id}}">
-                <td scope="row">{{$data->product_title}}</td>
-                <td>
-                   <input type="number" name="quantity" value="{{$data->quantity}}" min="1" style="width:70px; height:30px;"> 
-                </td>
-                <td>{{$data->price * $data->quantity}}
-                </td>
-                <td><img src="product_image/{{$data->image}}" alt="" width="30px" class="m-auto"></td>
-                <td >
-                  <button onclick="return confirm('Are you sure to update this product?')"  class="btn btn-primary">update</button>
-
-                  <a onclick="return confirm('Are you sure to remove this product?')" href="{{url('remove_cart',$data->id)}}" class="btn btn-danger">Remove</a>
-               </td>
-            </tr>
-            <?php $totalPrice = $totalPrice + ($data->price * $data->quantity) ?>
-            </form>
-            @endforeach
+                  </form>
+               </div>
+            </div>
             
-        </tbody>
-     </table>
-     <div>
-            <h1 class="total_deg center">Total Price: {{$totalPrice}}</h1>
-     </div>
-     <div class="center " > 
-            <h1 class="total_deg" >Proceed to order</h1>
-            <a  href="{{url('cash_order')}}" class="btn btn-danger">Cash On Delivery</a>
-     </div>
-      <!-- end client section -->
+            <div class="row">
+            @forelse($product as $data)
+               <div class="col-sm-6 col-md-4 col-lg-4">
+                  <div class="box">
+                     <div class="option_container">
+                        <div class="options">
+                           <a href="{{url('product_details',$data->id)}}" class="option1">
+                           Product Details
+                           </a>
+                           <form action="{{url('add_cart',$data->id)}}" method="POST">
+                              @csrf
+                              <div class="row">
+                                 <div class="col-md-4">
+                                    <input type="number" name="quantity" value="1" min="1" style="width:100px;height:49.5px;"> 
+                                 </div>
+                                 <div class="col-md-4">
+                                    <input type="submit" value="Add to cart" >
+                                 </div>
+                              </div>
+                              
+                           </form>
+                        </div>
+                     </div>
+                     <div class="img-box">
+                        <img src="product_image/{{$data->image}}" alt="">
+                     </div>
+                     <div class="detail-box">
+                        <h5>
+                           {{$data->title}}
+                        </h5>
+                        @if($data->discount_price!=null)
+                        <h6 style="color:red;">
+                           ${{$data->discount_price}}
+                        </h6>
+                        <h6 style="text-decoration:line-through;color:blue;">
+                           ${{$data->price}}
+                        </h6>
+                        @else
+                        <h6 style="color:blue;">
+                           ${{$data->price}}
+                        </h6>
+                        @endif
+                     </div>
+                  </div>
+               </div>
+            @empty
+               <div style="font-size:20px;">
+                  Nothing Found
+               </div>
+            @endforelse
+            
+            <div style="padding:20px; margin:auto;"> {{ $product->links() }}</div>
+            </div>
+            
+         </div>
+         <div class="btn-box">
+               <a href="{{url('all_product')}}">
+               View All products
+               </a>
+            </div>
+         
+</section>
+      <!-- end product section -->
       <!-- footer start -->
-     
+      @include('home.footer')
       <!-- footer end -->
       <div class="cpy_">
          <p class="mx-auto">© 2021 All Rights Reserved By <a href="https://html.design/">Free Html Templates</a><br>

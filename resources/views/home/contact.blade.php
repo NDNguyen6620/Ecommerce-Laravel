@@ -2,7 +2,6 @@
 <html>
    <head>
       <!-- Basic -->
-      <base href="/public">
       <meta charset="utf-8" />
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <!-- Mobile Metas -->
@@ -21,21 +20,6 @@
       <link href="home/css/style.css" rel="stylesheet" />
       <!-- responsive style -->
       <link href="home/css/responsive.css" rel="stylesheet" />
-      <style type="text/css">
-            .center{
-                margin:auto;
-                width: 50%;
-                text-align:center;
-            }
-            table,th,td{
-                border: 1px solid black;
-            }
-            .total_deg{
-               font-size:20px;
-               padding:20px;
-               margin: auto;
-            }
-      </style>
    </head>
    <body>
       <div class="hero_area">
@@ -60,13 +44,13 @@
                               @endforeach
                            </ul>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item active">
                            <a class="nav-link" href="{{url('contact')}}">Contact</a>
                         </li>
                         <li class="nav-item">
                            <a class="nav-link" href="{{url('show_order')}}">Order</a>
                         </li>
-                        <li class="nav-item active">
+                        <li class="nav-item">
                            <a class="nav-link" href="{{url('show_cart')}}">My Cart</a>
                         </li>
                         @if (Route::has('login'))
@@ -94,65 +78,45 @@
             </div>
          </header>
          <!-- end header section -->
-         <!-- end slider section -->
+         <!-- slider section -->
+         <section class="inner_page_head">
+         <div class="container_fuild">
+            <div class="row">
+               <div class="col-md-12">
+                  <div class="full">
+                     <h3>Contact us</h3>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- end inner page section -->
       <!-- why section -->
-
-      @if(session()->has('message'))
-                    <div class="alert alert-success">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
-                        {{session()->get('message')}}
-                    </div>
-
-      @endif
-
-     <table class="table center">
-        <thead>
-            <tr>
-               
-                <th>Product title</th>
-                <th>Product quantity</th>
-                <th>Price</th>
-                <th>Image</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-        
-            <?php $totalPrice = 0; ?>
-            @foreach($cart as $data)
-            <form action="{{url('update_cart')}}" method="post">
-            @csrf
-            <tr>
-               <input type="hidden" name="cart_id" value="{{$data->id}}">
-                <td scope="row">{{$data->product_title}}</td>
-                <td>
-                   <input type="number" name="quantity" value="{{$data->quantity}}" min="1" style="width:70px; height:30px;"> 
-                </td>
-                <td>{{$data->price * $data->quantity}}
-                </td>
-                <td><img src="product_image/{{$data->image}}" alt="" width="30px" class="m-auto"></td>
-                <td >
-                  <button onclick="return confirm('Are you sure to update this product?')"  class="btn btn-primary">update</button>
-
-                  <a onclick="return confirm('Are you sure to remove this product?')" href="{{url('remove_cart',$data->id)}}" class="btn btn-danger">Remove</a>
-               </td>
-            </tr>
-            <?php $totalPrice = $totalPrice + ($data->price * $data->quantity) ?>
-            </form>
-            @endforeach
-            
-        </tbody>
-     </table>
-     <div>
-            <h1 class="total_deg center">Total Price: {{$totalPrice}}</h1>
-     </div>
-     <div class="center " > 
-            <h1 class="total_deg" >Proceed to order</h1>
-            <a  href="{{url('cash_order')}}" class="btn btn-danger">Cash On Delivery</a>
-     </div>
-      <!-- end client section -->
+      <section class="why_section layout_padding">
+         <div class="container">
+         
+            <div class="row">
+               <div class="col-lg-8 offset-lg-2">
+                  <div class="full">
+                     <form action="index.html">
+                        <fieldset>
+                           <input type="text" placeholder="Enter your full name" name="name" required />
+                           <input type="email" placeholder="Enter your email address" name="email" required />
+                           <input type="text" placeholder="Enter subject" name="subject" required />
+                           <textarea placeholder="Enter your message" required></textarea>
+                           <input type="submit" value="Submit" />
+                        </fieldset>
+                     </form>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- arrival section -->
+      @include('home.new_arrival')
+      <!-- end arrival section -->
       <!-- footer start -->
-     
+      @include('home.footer')
       <!-- footer end -->
       <div class="cpy_">
          <p class="mx-auto">© 2021 All Rights Reserved By <a href="https://html.design/">Free Html Templates</a><br>

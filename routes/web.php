@@ -39,12 +39,36 @@ Route::get('/delete_product/{id}', [AdminController::Class,'delete_product']);
 Route::get('/update_product/{id}', [AdminController::Class,'update_product']);
 Route::post('/update_product_confirm/{id}', [AdminController::Class,'update_product_confirm']);
 
+Route::get('/show_orders', [AdminController::Class,'show_orders']);
+Route::get('/show_order_detail/{id}', [AdminController::Class,'show_order_detail']);
+Route::get('/delivered/{id}', [AdminController::Class,'delivered']);
+Route::get('/print_pdf/{id}', [AdminController::Class,'print_pdf']);
+Route::get('/search', [AdminController::Class,'search']);
+Route::get('/search2', [AdminController::Class,'search2']);
+
+
 Route::get('/product_details/{id}', [HomeController::Class,'product_details']);
 Route::post('/add_cart/{id}', [HomeController::Class,'add_cart']);
 Route::get('/show_cart', [HomeController::Class,'show_cart']);
 Route::post('/update_cart', [HomeController::Class,'update_cart']);
 Route::get('/remove_cart/{id}', [HomeController::Class,'remove_cart']);
 Route::get('/cash_order', [HomeController::Class,'cash_order']);
+Route::get('/show_order', [HomeController::Class,'show_order']);
+Route::get('/show_order_detail/{id}', [HomeController::Class,'show_order_detail']);
+Route::post('/cancel/{id}', [HomeController::Class,'cancel']);
+
+
+
+Route::get('/product_search', [HomeController::Class,'product_search']);
+Route::get('/category_search/{name}', [HomeController::Class,'category_search']);
+Route::get('/all_product', [HomeController::Class,'all_product']);
+Route::get('/contact', [HomeController::Class,'contact']);
+
+
+
+
+
+
 
 
 

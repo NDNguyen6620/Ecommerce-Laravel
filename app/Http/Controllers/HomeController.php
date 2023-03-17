@@ -8,16 +8,20 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Category;
 use App\Models\Cart;
 use App\Models\Order;
+use App\Models\Order_detail;
+
 
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $product = Product::all();
-        return view('home.userpage',compact('product'));
+        $category = Category::all();
+        $product = Product::paginate(6)->withQueryString();
+        return view('home.userpage',compact('product','category'));
     }
 
     public function redirect()
@@ -67,9 +71,10 @@ class HomeController extends Controller
     public function show_cart()
     {
         if(auth::id()){
+            $category = Category::all();
             $id=Auth::user()->id;
             $cart = Cart::where('user_id','=',$id)->get();
-            return view('home.show_cart',compact('cart'));
+            return view('home.show_cart',compact('cart','category'));
         }
        else{
         return redirect('login');
@@ -90,31 +95,80 @@ class HomeController extends Controller
     }
     public function cash_order()
     {
+        
         $user=Auth::user();
         $userId = $user->id;
         $data = Cart::where('user_id','=',$userId)->get();
+        $order = new Order;
+
+        $order->name = $user->name;
+        $order->email = $user->email;
+        $order->phone = $user->phone;
+        $order->address = $user->address;
+        $order->user_id = $user->id;
+        $order->payment_status='cash on delivery';
+        $order->deliver_status= 'processing';
+        $order->save();
         foreach($data as $data){
-            $order = new Order;
-
-            $order->name = $data->name;
-            $order->email = $data->email;
-            $order->phone = $data->phone;
-            $order->address = $data->address;
-            $order->user_id = $data->user_id;
-            $order->product_title = $data->product_title;
-            $order->price = $data->price;
-            $order->quantity = $data->quantity;
-            $order->image = $data->image;
-            $order->product_id = $data->product_id;
-            $order->payment_status='cash on delivery';
-            $order->deliver_status= 'processing';
-            $order->save();
-
+            $order_detail = new Order_detail;
+            
+            $order_detail->orders_id = $order->id;
+            $order_detail->product_id = $data->product_id;
+            $order_detail->product_title = $data->product_title;
+            $order_detail->quantity = $data->quantity;
+            $order_detail->price = $data->price;
+            $order_detail->image = $data->image;
+            $order_detail->product_id = $data->product_id;
+            $order_detail->save();
             $cart_id = $data->id;
             $cart = Cart::find($cart_id);
             $cart->delete();
-
         }
+        
         return redirect()->back()->with('message','Order success');
+    }
+
+    public function show_order()
+    {
+        $category = Category::all();
+        $order = Order::where('user_id',Auth::user()->id)->orderBy('created_at','desc')->paginate(5);
+        return view('home.show_order',compact('category','order'));
+    }
+    public function show_order_detail($id)
+    {
+        $category = Category::all();
+        $order_detail = Order_detail::where('orders_id',$id)->get();
+        return view('home.show_order_detail',compact('category','order_detail'));
+    }
+    public function cancel($id)
+    {
+        $order = Order::find($id);
+        $order->deliver_status = 'You cancel the order';
+        return redirect()->back();
+    }
+    public function product_search(Request $request)
+    {
+        $category = Category::all();
+        $search = $request->search; 
+        $product = Product::where('title','LIKE',"%$search%")->orWhere('category','LIKE',"%$search%")->
+        orWhere('price','LIKE',"%$search%")->orWhere('discount_price','LIKE',"%$search%")->paginate(6);
+        return view('home.all_product',compact('product','category'));
+    }
+    public function category_search(String $name)
+    {
+        $category = Category::all();
+        $product = Product::where('category','LIKE',"%$name%")->paginate(6);
+        return view('home.cate_product',compact('product','category','name'));
+    }
+    public function all_product()
+    {
+        $category = Category::all();
+        $product = Product::paginate(9)->withQueryString();
+        return view('home.all_product',compact('product','category'));
+    }
+    public function contact()
+    {
+        $category = Category::all();
+        return view('home.contact',compact('category'));
     }
 }

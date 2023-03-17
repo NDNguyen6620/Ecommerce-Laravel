@@ -4,10 +4,18 @@
                <h2>
                   Our <span>products</span>
                </h2>
+               <div>
+                  <form action="{{url('product_search')}}" method="GET">
+                     @csrf
+                     <input style="width:500px; "type="text" name="search" placeholder="Search for Something">
+                     <input type="submit" value="search">
+
+                  </form>
+               </div>
             </div>
             
             <div class="row">
-            @foreach($product as $data)
+            @forelse($product as $data)
                <div class="col-sm-6 col-md-4 col-lg-4">
                   <div class="box">
                      <div class="option_container">
@@ -51,7 +59,20 @@
                      </div>
                   </div>
                </div>
-            @endforeach
+            @empty
+               <div style="font-size:20px;">
+                  Nothing Found
+               </div>
+            @endforelse
+            
+            <div style="padding:20px; margin:auto;"> {{ $product->links() }}</div>
             </div>
+            
          </div>
-      </section>
+         <div class="btn-box">
+               <a href="{{url('all_product')}}">
+               View All products
+               </a>
+            </div>
+         
+</section>

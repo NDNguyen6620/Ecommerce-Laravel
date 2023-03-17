@@ -86,7 +86,7 @@
                             <div class="div_design">
                                 <label for="">Product Image:</label>
                                 
-                                <input type="file" name="file" required>
+                                <input type="file" name="file">
                             </div>
                             <div >
                                 <input type="submit" value="Update Product" class="btn btn-primary">

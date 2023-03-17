@@ -35,6 +35,11 @@
                padding:20px;
                margin: auto;
             }
+            .font_size2{
+            text-align:center;
+            font-size:25px;
+            padding-top:20px;
+        }
       </style>
    </head>
    <body>
@@ -63,10 +68,10 @@
                         <li class="nav-item">
                            <a class="nav-link" href="{{url('contact')}}">Contact</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item active">
                            <a class="nav-link" href="{{url('show_order')}}">Order</a>
                         </li>
-                        <li class="nav-item active">
+                        <li class="nav-item ">
                            <a class="nav-link" href="{{url('show_cart')}}">My Cart</a>
                         </li>
                         @if (Route::has('login'))
@@ -104,52 +109,31 @@
                     </div>
 
       @endif
-
-     <table class="table center">
-        <thead>
-            <tr>
-               
-                <th>Product title</th>
-                <th>Product quantity</th>
-                <th>Price</th>
-                <th>Image</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-        
-            <?php $totalPrice = 0; ?>
-            @foreach($cart as $data)
-            <form action="{{url('update_cart')}}" method="post">
-            @csrf
-            <tr>
-               <input type="hidden" name="cart_id" value="{{$data->id}}">
-                <td scope="row">{{$data->product_title}}</td>
-                <td>
-                   <input type="number" name="quantity" value="{{$data->quantity}}" min="1" style="width:70px; height:30px;"> 
-                </td>
-                <td>{{$data->price * $data->quantity}}
-                </td>
-                <td><img src="product_image/{{$data->image}}" alt="" width="30px" class="m-auto"></td>
-                <td >
-                  <button onclick="return confirm('Are you sure to update this product?')"  class="btn btn-primary">update</button>
-
-                  <a onclick="return confirm('Are you sure to remove this product?')" href="{{url('remove_cart',$data->id)}}" class="btn btn-danger">Remove</a>
-               </td>
-            </tr>
-            <?php $totalPrice = $totalPrice + ($data->price * $data->quantity) ?>
-            </form>
-            @endforeach
-            
-        </tbody>
-     </table>
-     <div>
-            <h1 class="total_deg center">Total Price: {{$totalPrice}}</h1>
-     </div>
-     <div class="center " > 
-            <h1 class="total_deg" >Proceed to order</h1>
-            <a  href="{{url('cash_order')}}" class="btn btn-danger">Cash On Delivery</a>
-     </div>
+                    <table class="table center">
+                        <thead>
+                            <tr class="th_color">
+                                <th>Product Title</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Image</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php $totalPrice = 0; ?>
+                            @foreach($order_detail as $data)
+                            <tr>
+                                <td scope="row">{{$data->product_title}}</td>
+                                <td>{{$data->quantity}}</td>
+                                <td>{{$data->price * $data->quantity}}</td>
+                                <td>
+                                    <img style="margin:auto;" width="50px" src="/product_image/{{$data->image}}" alt="">
+                                </td>                           
+                            </tr>
+                            <?php $totalPrice = $totalPrice + ($data->price * $data->quantity) ?>
+                            @endforeach
+                        </tbody>
+                    </table> 
+                    <h4 class="font_size2">Total Price: {{$totalPrice}}</h4>
       <!-- end client section -->
       <!-- footer start -->
      
