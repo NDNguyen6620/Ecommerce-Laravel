@@ -79,7 +79,7 @@
                                 <td>{{$data->deliver_status}}</td>
                                 <td>{{$data->created_at}}</td>
                                 <td>
-                                    <a href="{{url('show_order_detail',$data->id)}}" class="btn btn-primary">Order Detail</a>
+                                    <a href="{{url('order_detail',$data->id)}}" class="btn btn-primary">Order Detail</a>
                                 </td>
                                 <td>
                                     @if($data->deliver_status == 'processing')

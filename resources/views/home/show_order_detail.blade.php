@@ -33,7 +33,6 @@
             .total_deg{
                font-size:20px;
                padding:20px;
-               margin: auto;
             }
             .font_size2{
             text-align:center;
@@ -57,11 +56,11 @@
                         <li class="nav-item ">
                            <a class="nav-link" href="{{url('/')}}">Home <span class="sr-only">(current)</span></a>
                         </li>
-                        <li class="nav-item dropdown ">
+                        <li class="nav-item dropdown">
                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"> <span class="nav-label">Products <span class="caret"></span></a>
                            <ul class="dropdown-menu">
                               @foreach($category as $cate)
-                              <li><a href="{{url('category_search',$cate->category_name)}}">{{$cate->category_name}}</a></li>
+                              <li><a href="{{url('category_search',$cate->id)}}">{{$cate->category_name}}</a></li>
                               @endforeach
                            </ul>
                         </li>
@@ -122,11 +121,11 @@
                         <?php $totalPrice = 0; ?>
                             @foreach($order_detail as $data)
                             <tr>
-                                <td scope="row">{{$data->product_title}}</td>
+                                <td scope="row">{{$data->product->title}}</td>
                                 <td>{{$data->quantity}}</td>
                                 <td>{{$data->price * $data->quantity}}</td>
                                 <td>
-                                    <img style="margin:auto;" width="50px" src="/product_image/{{$data->image}}" alt="">
+                                    <img style="margin:auto;" width="50px" src="/product_image/{{$data->product->image}}" alt="">
                                 </td>                           
                             </tr>
                             <?php $totalPrice = $totalPrice + ($data->price * $data->quantity) ?>

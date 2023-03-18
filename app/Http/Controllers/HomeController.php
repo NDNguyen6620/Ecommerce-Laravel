@@ -35,8 +35,9 @@ class HomeController extends Controller
     }
     public function product_details($id)
     {
+        $category = Category::all();
         $product = Product::find($id);
-        return view('home.product_details',compact('product'));
+        return view('home.product_details',compact('product','category'));
     }
     public function add_cart(Request $request, $id)
     {
@@ -114,11 +115,8 @@ class HomeController extends Controller
             
             $order_detail->orders_id = $order->id;
             $order_detail->product_id = $data->product_id;
-            $order_detail->product_title = $data->product_title;
             $order_detail->quantity = $data->quantity;
             $order_detail->price = $data->price;
-            $order_detail->image = $data->image;
-            $order_detail->product_id = $data->product_id;
             $order_detail->save();
             $cart_id = $data->id;
             $cart = Cart::find($cart_id);
@@ -140,24 +138,32 @@ class HomeController extends Controller
         $order_detail = Order_detail::where('orders_id',$id)->get();
         return view('home.show_order_detail',compact('category','order_detail'));
     }
+
+
+    //cancel order
     public function cancel($id)
     {
         $order = Order::find($id);
-        $order->deliver_status = 'You cancel the order';
+        $order->deliver_status = 'Cancel the order';
+        $order->save();
         return redirect()->back();
     }
+    //search
     public function product_search(Request $request)
     {
         $category = Category::all();
         $search = $request->search; 
-        $product = Product::where('title','LIKE',"%$search%")->orWhere('category','LIKE',"%$search%")->
+        $product = Product::where('title','LIKE',"%$search%")->
         orWhere('price','LIKE',"%$search%")->orWhere('discount_price','LIKE',"%$search%")->paginate(6);
         return view('home.all_product',compact('product','category'));
     }
-    public function category_search(String $name)
+    public function category_search($id)
     {
+        
         $category = Category::all();
-        $product = Product::where('category','LIKE',"%$name%")->paginate(6);
+        $name = category::find($id);
+        $name = $name->category_name;
+        $product = Product::where('category_id',$id)->paginate(6);
         return view('home.cate_product',compact('product','category','name'));
     }
     public function all_product()

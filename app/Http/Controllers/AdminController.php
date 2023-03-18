@@ -32,6 +32,14 @@ class AdminController extends Controller
         $category = Category::find($id)->delete();
         return redirect()->back()->with('message','Category deleted successfully');
     }
+    public function update_category(Request $req)
+    {
+        $category=Category::find($req->id);
+        $category->update( [
+            'category_name' => $req->category_name,
+        ]);
+        return redirect()->back();
+    }
 
     // product_funtion
     public function view_product()
@@ -58,7 +66,7 @@ class AdminController extends Controller
             }
     }
     public function show_product()
-    {
+    {   
         $product = Product::paginate(6)->withQueryString();
         return view('admin.show_product',compact('product'));    
     }
@@ -93,6 +101,9 @@ class AdminController extends Controller
         }
     }
     
+
+
+    // order/order detail funtion
     public function show_orders()
     {
         $order = Order::all();
@@ -100,7 +111,7 @@ class AdminController extends Controller
     }
 
 
-    public function show_order_detail($id)
+    public function order_detail($id)
     {
         $order_detail = Order_detail::where('orders_id','=',$id)->get();
         return view('admin.order_detail',compact('order_detail'));
@@ -131,7 +142,7 @@ class AdminController extends Controller
     public function search2(Request $request)
     {
         $search = $request->search2;    
-        $product = Product::where('title','LIKE',"%$search%")->orWhere('category','LIKE',"%$search%")->
+        $product = Product::where('title','LIKE',"%$search%")->
         orWhere('price','LIKE',"%$search%")->orWhere('quantity','LIKE',"%$search%")->
         orWhere('discount_price','LIKE',"%$search%")->paginate(5);
         return view('admin.show_product',compact('product'));

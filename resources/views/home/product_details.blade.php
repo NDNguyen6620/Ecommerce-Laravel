@@ -52,7 +52,7 @@
                         </h6>
                         @endif
                         <h6>
-                           Product category: {{$product->category}}
+                           Product category: {{$product->category->category_name}}
                         </h6>
                         <h6>
                             Product description: {{$product->description}}

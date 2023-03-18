@@ -16,4 +16,8 @@ class Order_detail extends Model
         'price',
         'image'
     ];
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

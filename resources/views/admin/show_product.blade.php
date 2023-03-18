@@ -29,6 +29,7 @@
         td{
             border:1px solid black;
             background-color:#f5f5ef;
+            text-align:center;
 
         }
     </style>
@@ -70,7 +71,7 @@
                                 <td>{{$data->title}}</td>
                                 <td>{{$data->description}}</td>
                                 <td>{{$data->quantity}}</td>
-                                <td>{{$data->category}}</td>
+                                <td>{{$data->category->category_name}}</td>
                                 <td>{{$data->price}}</td>
                                 <td>{{$data->discount_price}}</td>
                                 <td>

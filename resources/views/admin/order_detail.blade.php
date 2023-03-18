@@ -21,14 +21,24 @@
             font-size:25px;
             padding-top:20px;
         }
+        .img_size{
+            width: 70px !important;
+            height:100px !important;
+            border-radius:10px !important;
+            margin:auto;
+        }
         .th_color{
             background:#fff;
         }
         th{
             border:1px solid black;
+            text-align:center;
         }
         td{
-            border:1px solid white;
+            border:1px solid black;
+            background-color:#f5f5ef;
+            text-align:center;
+
 
         }
     </style>
@@ -57,11 +67,11 @@
                         <?php $totalPrice = 0; ?>
                             @foreach($order_detail as $data)
                             <tr>
-                                <td scope="row">{{$data->product_title}}</td>
+                                <td scope="row">{{$data->product->title}}</td>
                                 <td>{{$data->quantity}}</td>
                                 <td>{{$data->price * $data->quantity}}</td>
                                 <td>
-                                    <img src="/product_image/{{$data->image}}" alt="">
+                                    <img class="img_size" src="/product_image/{{$data->product->image}}" alt="">
                                 </td>                           
                             </tr>
                             <?php $totalPrice = $totalPrice + ($data->price * $data->quantity) ?>

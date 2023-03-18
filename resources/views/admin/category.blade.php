@@ -59,12 +59,17 @@
                     </thead>
                     <tbody>
                       @foreach($category as $data)
+                      <form action="{{url('update_category')}}" method="post">
+                        @csrf
                       <tr>
-                        <td scope="row">{{$data->category_name}}</td>
+                      <input type="hidden" name="id" value="{{$data->id}}">
+                        <td scope="row"><input type="text" name="category_name" value="{{$data->category_name}}"></td>
                         <td>
+                          <button onclick="return confirm('Are you sure to update this category?')" type="submit" class="btn btn-success">Update</button>
                           <a onclick="return confirm('Are you sure to delete this category?')" href="{{url('delete_category',$data->id)}}" class="btn btn-danger" >Delete</a>
                         </td>
                       </tr>
+                      </form>
                       @endforeach
                     </tbody>
                   </table>

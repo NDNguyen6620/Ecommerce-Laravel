@@ -41,7 +41,7 @@
                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"> <span class="nav-label">Products <span class="caret"></span></a>
                            <ul class="dropdown-menu">
                               @foreach($category as $cate)
-                              <li><a href="{{url('category_search',$cate->category_name)}}">{{$cate->category_name}}</a></li>
+                              <li><a href="{{url('category_search',$cate->id)}}">{{$cate->category_name}}</a></li>
                               @endforeach
                            </ul>
                         </li>
@@ -85,7 +85,7 @@
          <div class="container">
             <div class="heading_container heading_center">
                <h2>
-                  {{$name}} <span>products</span>
+                 {{$name}} <span>products</span>
                </h2>
                <div>
                   <form action="{{url('product_search')}}" method="GET">

@@ -70,10 +70,10 @@
                             </div >
                             <div class="div_design">
                                 <label for="">Product Category:</label>
-                                <select name="category" id="" class="text_color">
-                                    <option value="{{$product->category}}" selected="">{{$product->category}}</option>
+                                <select name="category_id" id="" class="text_color">
                                     @foreach($category as $value)
-                                    <option value="{{$value->category_name}}">{{$value->category_name}}</option>
+                                    <option value="{{$value->id}}" {{$value->id == $product->category_id ? 'selected' : ''}}>
+                                    {{$value->category_name}}</option>                                    
                                     @endforeach
                                 </select>
                             </div>

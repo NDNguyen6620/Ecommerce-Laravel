@@ -52,11 +52,11 @@
                         <li class="nav-item ">
                            <a class="nav-link" href="{{url('/')}}">Home <span class="sr-only">(current)</span></a>
                         </li>
-                        <li class="nav-item dropdown ">
+                        <li class="nav-item dropdown">
                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"> <span class="nav-label">Products <span class="caret"></span></a>
                            <ul class="dropdown-menu">
                               @foreach($category as $cate)
-                              <li><a href="{{url('category_search',$cate->category_name)}}">{{$cate->category_name}}</a></li>
+                              <li><a href="{{url('category_search',$cate->id)}}">{{$cate->category_name}}</a></li>
                               @endforeach
                            </ul>
                         </li>
@@ -127,7 +127,7 @@
                                 </td>
                                 <td>
                                     @if($item->deliver_status == 'processing')
-                                    <a onclick="return confirm('Are you sure to cancel this order ?')" href="{{url('cancel',$item->id)}}" class="btn btn-primary">Cancel Order</a>
+                                    <a onclick="return confirm('Are you sure to cancel this order ?')" href="{{url('cancel',$item->id)}}" class="btn btn-danger">Cancel Order</a>
                                     @else
                                     <p>Can't Cancel Order</p>
                                     @endif
